@@ -1,0 +1,98 @@
+[gd_scene format=3 uid="uid://dkfybum1em5q"]
+
+[ext_resource type="Script" uid="uid://b0gd8hrqpvtbb" path="res://player.gd" id="1_glv2v"]
+[ext_resource type="Script" uid="uid://8bfje5ynu5dd" path="res://joystick.gd" id="2_r0du0"]
+[ext_resource type="Texture2D" uid="uid://4q335xxs2p" path="res://icon.svg" id="2_uu6xs"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_g7b7a"]
+size = Vector2(50, 50)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gyc6d"]
+albedo_color = Color(0.5691017, 0.5691017, 0.5691017, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6qx4q"]
+size = Vector3(50, 0.1, 50)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_tv015"]
+
+[sub_resource type="Sky" id="Sky_t7tip"]
+sky_material = SubResource("ProceduralSkyMaterial_tv015")
+
+[sub_resource type="Environment" id="Environment_lv0v5"]
+background_mode = 2
+sky = SubResource("Sky_t7tip")
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_g7b7a"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6qx4q"]
+albedo_color = Color(0, 0.7647059, 1, 1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rxg2q"]
+radius = 0.4
+height = 1.8
+
+[node name="Main" type="Node3D" unique_id=1230800162]
+
+[node name="Ground" type="StaticBody3D" parent="." unique_id=497813976]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground" unique_id=1024332987]
+mesh = SubResource("PlaneMesh_g7b7a")
+surface_material_override/0 = SubResource("StandardMaterial3D_gyc6d")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=1701933429]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
+shape = SubResource("BoxShape3D_6qx4q")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=73029907]
+environment = SubResource("Environment_lv0v5")
+
+[node name="Player" type="CharacterBody3D" parent="." unique_id=524749417 groups=["player"]]
+script = ExtResource("1_glv2v")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player" unique_id=2119414389]
+mesh = SubResource("CapsuleMesh_g7b7a")
+surface_material_override/0 = SubResource("StandardMaterial3D_6qx4q")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=779587009]
+shape = SubResource("CapsuleShape3D_rxg2q")
+
+[node name="Camera3D" type="Camera3D" parent="Player" unique_id=987855149]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 4)
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=900823471]
+
+[node name="joystick" type="Control" parent="UI" unique_id=172428741 groups=["joystick"]]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 50.0
+offset_top = -228.0
+offset_right = 250.0
+offset_bottom = -28.0
+grow_vertical = 0
+script = ExtResource("2_r0du0")
+
+[node name="base" type="TextureRect" parent="UI/joystick" unique_id=966038264]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_uu6xs")
+
+[node name="knob" type="TextureRect" parent="UI/joystick" unique_id=1240108340]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 0
+offset_left = 36.0
+offset_top = 39.0
+offset_right = 164.0
+offset_bottom = 167.0
+pivot_offset = Vector2(60, 60)
+texture = ExtResource("2_uu6xs")
+
+[node name="TouchScreenButton" type="TouchScreenButton" parent="UI" unique_id=853733567]
+position = Vector2(950, 450)
+texture_normal = ExtResource("2_uu6xs")
+action = "jump"
