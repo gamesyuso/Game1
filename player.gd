@@ -22,10 +22,17 @@ func _physics_process(delta):
 	if joystick and joystick.output.length() > 0.1:
 		input_dir = joystick.output
 	
-	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	var cam_basis = $CameraPivot.global_transform.basis
+	var direction = (cam_basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	direction.y = 0
+	direction = direction.normalized()
+	
 	if direction:
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
+		
+		var target_angle = atan2(direction.x, direction.z)
+		$MeshPivot.rotation.y = lerp_angle($MeshPivot.rotation.y, target_angle, 10.0 * delta)
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)

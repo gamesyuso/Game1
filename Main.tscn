@@ -1,17 +1,9 @@
 [gd_scene format=3 uid="uid://dkfybum1em5q"]
 
 [ext_resource type="Script" uid="uid://b0gd8hrqpvtbb" path="res://player.gd" id="1_glv2v"]
+[ext_resource type="Script" uid="uid://btfswxscrdu2" path="res://camera_pivot.gd" id="2_cm0pq"]
 [ext_resource type="Script" uid="uid://8bfje5ynu5dd" path="res://joystick.gd" id="2_r0du0"]
 [ext_resource type="Texture2D" uid="uid://4q335xxs2p" path="res://icon.svg" id="2_uu6xs"]
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_g7b7a"]
-size = Vector2(50, 50)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gyc6d"]
-albedo_color = Color(0.5691017, 0.5691017, 0.5691017, 1)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_6qx4q"]
-size = Vector3(50, 0.1, 50)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_tv015"]
 
@@ -22,6 +14,19 @@ sky_material = SubResource("ProceduralSkyMaterial_tv015")
 background_mode = 2
 sky = SubResource("Sky_t7tip")
 
+[sub_resource type="PlaneMesh" id="PlaneMesh_g7b7a"]
+size = Vector2(50, 50)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gyc6d"]
+albedo_color = Color(0.5691017, 0.5691017, 0.5691017, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6qx4q"]
+size = Vector3(50, 0.1, 50)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rxg2q"]
+radius = 0.4
+height = 1.8
+
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_g7b7a"]
 radius = 0.4
 height = 1.8
@@ -29,15 +34,15 @@ height = 1.8
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6qx4q"]
 albedo_color = Color(0, 0.7647059, 1, 1)
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rxg2q"]
-radius = 0.4
-height = 1.8
-
 [node name="Main" type="Node3D" unique_id=1230800162]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=73029907]
+environment = SubResource("Environment_lv0v5")
 
 [node name="Ground" type="StaticBody3D" parent="." unique_id=497813976]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ground" unique_id=1024332987]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.37895012, -0.0687933, -0.8445482)
 mesh = SubResource("PlaneMesh_g7b7a")
 surface_material_override/0 = SubResource("StandardMaterial3D_gyc6d")
 
@@ -45,21 +50,26 @@ surface_material_override/0 = SubResource("StandardMaterial3D_gyc6d")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
 shape = SubResource("BoxShape3D_6qx4q")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=73029907]
-environment = SubResource("Environment_lv0v5")
-
 [node name="Player" type="CharacterBody3D" parent="." unique_id=524749417 groups=["player"]]
 script = ExtResource("1_glv2v")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Player" unique_id=2119414389]
-mesh = SubResource("CapsuleMesh_g7b7a")
-surface_material_override/0 = SubResource("StandardMaterial3D_6qx4q")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=779587009]
 shape = SubResource("CapsuleShape3D_rxg2q")
 
-[node name="Camera3D" type="Camera3D" parent="Player" unique_id=987855149]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 4)
+[node name="CameraPivot" type="Node3D" parent="Player" unique_id=1176203145]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+script = ExtResource("2_cm0pq")
+
+[node name="SpringArm3D" type="SpringArm3D" parent="Player/CameraPivot" unique_id=687041413]
+spring_length = 4.0
+
+[node name="Camera3D" type="Camera3D" parent="Player/CameraPivot/SpringArm3D" unique_id=987855149]
+
+[node name="MeshPivot" type="Node3D" parent="Player" unique_id=637228515]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player/MeshPivot" unique_id=2119414389]
+mesh = SubResource("CapsuleMesh_g7b7a")
+surface_material_override/0 = SubResource("StandardMaterial3D_6qx4q")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=900823471]
 
@@ -96,3 +106,72 @@ texture = ExtResource("2_uu6xs")
 position = Vector2(950, 450)
 texture_normal = ExtResource("2_uu6xs")
 action = "jump"
+
+[node name="MansionShell" type="CSGBox3D" parent="." unique_id=1098129467]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -20)
+size = Vector3(10, 4, 8)
+
+[node name="InteriorCut1" type="CSGBox3D" parent="MansionShell" unique_id=80003511]
+operation = 2
+size = Vector3(9.6, 3.8, 7.6)
+
+[node name="DoorCut1" type="CSGBox3D" parent="MansionShell" unique_id=1325871472]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.65, 4)
+operation = 2
+size = Vector3(1.5, 2.5, 0.5)
+
+[node name="Window1" type="CSGBox3D" parent="MansionShell" unique_id=1200427302]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 4)
+operation = 2
+size = Vector3(0.8, 1.2, 0.5)
+
+[node name="Window2" type="CSGBox3D" parent="MansionShell" unique_id=1755455217]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 4)
+operation = 2
+size = Vector3(0.8, 1.2, 0.5)
+
+[node name="Window3" type="CSGBox3D" parent="MansionShell" unique_id=962639766]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 4)
+operation = 2
+size = Vector3(0.8, 1.2, 0.5)
+
+[node name="Window4" type="CSGBox3D" parent="MansionShell" unique_id=556187777]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 4)
+operation = 2
+size = Vector3(0.8, 1.2, 0.5)
+
+[node name="SecondFloorShell" type="CSGBox3D" parent="." unique_id=262704586]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.75, -20)
+size = Vector3(10, 3.5, 8)
+
+[node name="InteriorCut2" type="CSGBox3D" parent="SecondFloorShell" unique_id=317513362]
+operation = 2
+size = Vector3(9.6, 3.3, 7.6)
+
+[node name="Window5" type="CSGBox3D" parent="SecondFloorShell" unique_id=2138541390]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 4)
+operation = 2
+size = Vector3(0.8, 1.2, 0.5)
+
+[node name="Window6" type="CSGBox3D" parent="SecondFloorShell" unique_id=1376182737]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 4)
+operation = 2
+size = Vector3(0.8, 1.2, 0.5)
+
+[node name="Window7" type="CSGBox3D" parent="SecondFloorShell" unique_id=2144361355]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 4)
+operation = 2
+size = Vector3(0.8, 1.2, 0.5)
+
+[node name="Window8" type="CSGBox3D" parent="SecondFloorShell" unique_id=1364512067]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 4)
+operation = 2
+size = Vector3(0.8, 1.2, 0.5)
+
+[node name="RoofPiece1" type="CSGBox3D" parent="." unique_id=340268653]
+transform = Transform3D(0.8660254, -0.5, 0, 0.5, 0.8660254, 0, 0, 0, 1, -3.3, 7.5, -20)
+size = Vector3(9, 0.3, 8)
+
+[node name="RoofPiece2" type="CSGBox3D" parent="." unique_id=1548119377]
+transform = Transform3D(0.8660254, 0.5, 0, -0.5, 0.8660254, 0, 0, 0, 1, 3.9, 7.5, -20)
+size = Vector3(9, 0.3, 8)
