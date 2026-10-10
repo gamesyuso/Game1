@@ -1,0 +1,363 @@
+[gd_scene format=3 uid="uid://c4iy1iixyp71x"]
+
+[ext_resource type="PackedScene" uid="uid://do22gfx8k6edm" path="res://model.gltf" id="1_ic8f3"]
+[ext_resource type="Script" uid="uid://c1ry3ipcmt7in" path="res://player.gd" id="1_k8fsh"]
+[ext_resource type="Script" uid="uid://bpnpgwjroyqq0" path="res://flickering_light.gd" id="4_bpy31"]
+[ext_resource type="Script" uid="uid://cjiutlr781so4" path="res://unstable_light.gd" id="5_3t6hy"]
+[ext_resource type="Script" uid="uid://dhjo83wvb2qmu" path="res://mirror_camera.gd" id="6_ijw5b"]
+[ext_resource type="PackedScene" uid="uid://cl5488ewhaihy" path="res://room.glb" id="7_o5mb0"]
+[ext_resource type="PackedScene" uid="uid://blga4n6wsbty3" path="res://kitchen.glb" id="8_30jvp"]
+[ext_resource type="PackedScene" uid="uid://dcs6m100b61yy" path="res://bathroom.glb" id="9_ihk4i"]
+[ext_resource type="Script" uid="uid://d4e6wssyc8npf" path="res://jumpscare_trigger.gd" id="10_1g7yk"]
+[ext_resource type="PackedScene" uid="uid://c3g6tn1n0hg8" path="res://livingroom.glb" id="10_ceood"]
+[ext_resource type="AudioStream" uid="uid://xw517r30oy3g" path="res://sound/bijan6207-night-horror-sound-effect-167307.mp3" id="11_1pkbu"]
+[ext_resource type="AudioStream" uid="uid://cw6m71yq5qxnx" path="res://sound/oliper18-scary-laugh-377526.mp3" id="12_0ynq7"]
+[ext_resource type="AudioStream" uid="uid://dtd3x86v1o2q8" path="res://sound/coghezzi-item-pickup-game-ui-collect-sfx-553942.mp3" id="13_1pkbu"]
+[ext_resource type="Shader" uid="uid://bikeo4f0k6xrp" path="res://house_inside.gdshader" id="14_f4o4h"]
+[ext_resource type="Script" uid="uid://c6l50rmw4v2s5" path="res://bathroom_trigger.gd" id="15_a52oa"]
+
+[sub_resource type="Environment" id="Environment_g7b7a"]
+background_mode = 2
+ambient_light_source = 1
+ssao_radius = 1.75
+glow_enabled = true
+glow_bloom = 1.0
+fog_light_color = Color(0.5355, 0.57172495, 0.63, 1)
+fog_light_energy = 0.32
+volumetric_fog_density = 0.0
+volumetric_fog_emission_energy = 0.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_g7b7a"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_lquwl"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1bvp3"]
+albedo_color = Color(0.67, 0.59496003, 0.5092, 1)
+albedo_texture_msdf = true
+metallic = 0.2
+roughness = 0.15
+roughness_texture = SubResource("NoiseTexture2D_lquwl")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5hrn0"]
+size = Vector3(40, 0.2, 40)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_g7b7a"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_g7b7a"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gyc6d"]
+height = 1.8066406
+
+[sub_resource type="BoxMesh" id="BoxMesh_g7b7a"]
+
+[sub_resource type="Skin" id="Skin_k8fsh"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_3t6hy"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bpy31"]
+albedo_color = Color(0.96, 0.90624, 0.8448, 1)
+metallic = 0.2
+roughness = 0.15
+roughness_texture = SubResource("NoiseTexture2D_3t6hy")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g7b7a"]
+shader = ExtResource("14_f4o4h")
+shader_parameter/intensity = 0.0
+shader_parameter/time = 0.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_g7b7a"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ceood"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_gyc6d"]
+size = Vector3(1, 1.9491577, 1)
+
+[node name="HouseInterior" type="Node3D" unique_id=1633677175]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=486647352]
+environment = SubResource("Environment_g7b7a")
+
+[node name="Ground" type="StaticBody3D" parent="." unique_id=813493701]
+
+[node name="GroundMesh" type="MeshInstance3D" parent="Ground" unique_id=1071688412]
+transform = Transform3D(31.010662, 0, 0, 0, 1, 0, 0, 0, 31.485096, 1.0870242, -3.4752684, -10.34915)
+mesh = SubResource("PlaneMesh_g7b7a")
+surface_material_override/0 = SubResource("StandardMaterial3D_1bvp3")
+
+[node name="GroundCollision" type="CollisionShape3D" parent="Ground" unique_id=1157281172]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.3059187, 0)
+shape = SubResource("BoxShape3D_5hrn0")
+
+[node name="Player" type="CharacterBody3D" parent="." unique_id=1319856276]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.1591455, 0)
+input_capture_on_drag = true
+script = ExtResource("1_k8fsh")
+
+[node name="PlayerModel" parent="Player" unique_id=1204125476 instance=ExtResource("1_ic8f3")]
+
+[node name="PlayerCollision" type="CollisionShape3D" parent="Player" unique_id=1344527505]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88705444, 0)
+shape = SubResource("CapsuleShape3D_g7b7a")
+
+[node name="PlayerCamera" type="Camera3D" parent="Player" unique_id=947629763]
+transform = Transform3D(-0.990312, 0, 0.13886058, 0, 1, 0, -0.13886058, 0, -0.990312, 0, 1.5857627, 0.18961251)
+
+[node name="Flashlight" type="SpotLight3D" parent="Player/PlayerCamera" unique_id=1757766286]
+transform = Transform3D(0.97383666, -0.20930769, 0.08850099, 0.2164139, 0.97300535, -0.08016023, -0.06933379, 0.09721582, 0.99284536, 0.3327567, -0.37374914, -0.46520278)
+visible = false
+distance_fade_enabled = true
+spot_range = 100.0
+spot_attenuation = 0.27
+spot_angle = 30.75
+spot_angle_attenuation = 0.18946458
+
+[node name="FlashlightMesh" type="MeshInstance3D" parent="Player/PlayerCamera" unique_id=1498106955]
+transform = Transform3D(0.122387856, -0.00034232438, -0.00092985627, -0.0008176508, -0.0040357723, -0.13999078, 0.00021230802, 0.18176594, -0.0031099804, 0.31218407, -0.3921907, -0.4416267)
+visible = false
+mesh = SubResource("CylinderMesh_g7b7a")
+
+[node name="InteractionRay" type="RayCast3D" parent="Player/PlayerCamera" unique_id=72892714]
+transform = Transform3D(-0.99031186, 0, -0.1388606, 0, 1, 0, 0.1388606, 0, -0.99031186, 0.70602494, -0.8917211, -1.2994432)
+target_position = Vector3(0, 0, 0.5)
+collide_with_areas = true
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=342791871]
+
+[node name="CrosshairContainer" type="CenterContainer" parent="HUD" unique_id=313339042]
+offset_left = 598.0
+offset_top = 318.0
+offset_right = 670.0
+offset_bottom = 427.0
+
+[node name="Crosshair" type="Label" parent="HUD/CrosshairContainer" unique_id=1304460410]
+layout_mode = 2
+text = "+"
+
+[node name="PickupButton" type="Button" parent="HUD" unique_id=1401884596]
+visible = false
+anchors_preset = -1
+anchor_right = 0.064
+anchor_bottom = 0.060000002
+offset_left = 1034.0
+offset_top = 554.0
+offset_right = 1067.08
+offset_bottom = 561.8
+text = "PICKUP"
+
+[node name="FlashlightButton" type="Button" parent="HUD" unique_id=1030290128]
+anchors_preset = -1
+anchor_right = 0.128
+anchor_bottom = 0.257
+offset_left = 1064.0
+offset_top = 530.0
+offset_right = 1036.16
+offset_bottom = 434.96002
+text = "ON/OFF"
+
+[node name="FlashlightPickup" type="Area3D" parent="." unique_id=965945456 groups=["pickup_item"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.34638667, 0, 1.8661376)
+
+[node name="FlashlightPickupMesh" type="MeshInstance3D" parent="FlashlightPickup" unique_id=2114180866]
+transform = Transform3D(-0.12117268, 0.025579132, 0.0004889941, -0.0008176508, -0.0040357723, -0.13999078, -0.017205097, -0.17995746, 0.0032089713, -0.09219125, -0.2660408, 0.23591602)
+mesh = SubResource("CylinderMesh_g7b7a")
+
+[node name="PickupCollision" type="CollisionShape3D" parent="FlashlightPickup" unique_id=1237642085]
+transform = Transform3D(-0.9673615, 0.11494157, -0.22583199, -0.23493291, -0.07282602, 0.9692796, 0.09496406, 0.9906991, 0.09745265, -0.5198266, -0.38343906, 2.2991118)
+top_level = true
+shape = SubResource("CapsuleShape3D_gyc6d")
+
+[node name="EnvironmentGeometry" type="StaticBody3D" parent="." unique_id=284587857]
+
+[node name="EnvironmentPart01" type="MeshInstance3D" parent="EnvironmentGeometry" unique_id=1359270755]
+transform = Transform3D(1.0969849, 0, 0, 0, 5.834907, 0, 0, 0, 44.939034, 3.2286873, 1.662358, 23.10677)
+mesh = SubResource("BoxMesh_g7b7a")
+
+[node name="EnvironmentPart02" type="MeshInstance3D" parent="EnvironmentGeometry" unique_id=384552482]
+transform = Transform3D(1.0969849, 0, 0, 0, 5.834907, 0, 0, 0, 2.3101032, 3.2286873, 1.662358, -1.8552582)
+mesh = SubResource("BoxMesh_g7b7a")
+
+[node name="EnvironmentPart03" type="MeshInstance3D" parent="EnvironmentGeometry" unique_id=636060352]
+transform = Transform3D(1.0969849, 0, 0, 0, 5.834907, 0, 0, 0, 44.939034, 8.410587, 1.662358, 5.1187973)
+mesh = SubResource("BoxMesh_g7b7a")
+
+[node name="EnvironmentPart04" type="MeshInstance3D" parent="EnvironmentGeometry" unique_id=2043745930]
+transform = Transform3D(0.8013454, 0, 0, 0, 5.834907, 0, 0, 0, 44.939034, -2.4189076, 1.8764493, 23.056658)
+mesh = SubResource("BoxMesh_g7b7a")
+skin = SubResource("Skin_k8fsh")
+surface_material_override/0 = SubResource("StandardMaterial3D_bpy31")
+
+[node name="EnvironmentPart05" type="MeshInstance3D" parent="EnvironmentGeometry" unique_id=1482099680]
+transform = Transform3D(0.8013454, 0, 0, 0, 5.834907, 0, 0, 0, 44.939034, -6.0625343, 1.8764493, 14.210457)
+mesh = SubResource("BoxMesh_g7b7a")
+skin = SubResource("Skin_k8fsh")
+surface_material_override/0 = SubResource("StandardMaterial3D_bpy31")
+
+[node name="EnvironmentPart06" type="MeshInstance3D" parent="EnvironmentGeometry" unique_id=2135911046]
+transform = Transform3D(-0.045297123, 0, 44.867188, 0, 5.834906, 0, -0.8000642, 0, -2.5402372, -1.3360195, 1.8764493, 4.66098)
+mesh = SubResource("BoxMesh_g7b7a")
+skin = SubResource("Skin_k8fsh")
+surface_material_override/0 = SubResource("StandardMaterial3D_bpy31")
+
+[node name="EnvironmentPart07" type="MeshInstance3D" parent="EnvironmentGeometry" unique_id=1792448840]
+transform = Transform3D(-0.010792181, 0, 44.934956, 0, 5.834906, 0, -0.8012727, 0, -0.6052184, 23.281767, 1.8764493, -2.9752913)
+mesh = SubResource("BoxMesh_g7b7a")
+skin = SubResource("Skin_k8fsh")
+surface_material_override/0 = SubResource("StandardMaterial3D_bpy31")
+
+[node name="EnvironmentPart08" type="MeshInstance3D" parent="EnvironmentGeometry" unique_id=1557447998]
+transform = Transform3D(-0.010792181, 0, 44.934956, 0, 5.834906, 0, -0.8012727, 0, -0.6052184, -23.549082, 1.8764493, -2.2499914)
+mesh = SubResource("BoxMesh_g7b7a")
+skin = SubResource("Skin_k8fsh")
+surface_material_override/0 = SubResource("StandardMaterial3D_bpy31")
+
+[node name="EnvironmentPart09" type="MeshInstance3D" parent="EnvironmentGeometry" unique_id=598929362]
+transform = Transform3D(0.01508517, 10.242715, 0, -0.8124499, 0.19018112, 0, 0, 0, 44.939037, -0.324826, 2.8591146, 6.9627724)
+mesh = SubResource("BoxMesh_g7b7a")
+
+[node name="EnvironmentPart10" type="MeshInstance3D" parent="EnvironmentGeometry" unique_id=872499466]
+transform = Transform3D(0.055537585, 5.4858637, 0, -2.9911168, 0.10185852, 0, 0, 0, 44.939037, -4.7960815, 2.721089, 4.66098)
+mesh = SubResource("BoxMesh_g7b7a")
+
+[node name="EnvironmentPart11" type="MeshInstance3D" parent="EnvironmentGeometry" unique_id=1277054110]
+transform = Transform3D(0.014808686, 5.8073387, -4.2836566, -0.8012074, 0.10832071, 0, 0.0014180432, 0.5560964, 44.73441, 5.951502, 2.7268338, 4.4420686)
+mesh = SubResource("BoxMesh_g7b7a")
+
+[node name="FlickeringLight01" type="SpotLight3D" parent="." unique_id=169896764]
+transform = Transform3D(1, 0, 0, 0, 0.10007277, 0.99498016, 0, -0.99498016, 0.10007277, 0.43596613, 2.5983505, -0.646749)
+light_energy = 3.095
+light_indirect_energy = 1.865
+shadow_enabled = true
+spot_range = 1124.994
+spot_attenuation = 2.97
+spot_angle = 88.31
+spot_angle_attenuation = 0.0003005726
+script = ExtResource("4_bpy31")
+
+[node name="FlickeringLight02" type="SpotLight3D" parent="." unique_id=2029212974]
+transform = Transform3D(1, 0, 0, 0, 0.10007277, 0.99498016, 0, -0.99498016, 0.10007277, 0.42072403, 3.0265212, 3.190424)
+light_energy = 3.095
+light_indirect_energy = 1.865
+shadow_enabled = true
+spot_attenuation = 2.3
+spot_angle = 70.45
+script = ExtResource("4_bpy31")
+
+[node name="FlickeringLight03" type="SpotLight3D" parent="." unique_id=1429330121]
+transform = Transform3D(1, 0, 0, 0, 0.10007277, 0.99498016, 0, -0.99498016, 0.10007277, 6.5760927, 3.0968337, 0.5676513)
+light_energy = 3.095
+light_indirect_energy = 1.865
+shadow_enabled = true
+spot_attenuation = 1.46
+spot_angle = 64.3
+script = ExtResource("4_bpy31")
+
+[node name="FlickeringLight04" type="SpotLight3D" parent="." unique_id=779857607]
+transform = Transform3D(1, 0, 0, 0, 0.10007277, 0.99498016, 0, -0.99498016, 0.10007277, -0.06426239, 3.0968337, -6.751664)
+light_energy = 3.095
+light_indirect_energy = 1.865
+shadow_enabled = true
+spot_attenuation = 0.44
+spot_angle = 64.3
+script = ExtResource("4_bpy31")
+
+[node name="UnstableLight" type="SpotLight3D" parent="." unique_id=350762417]
+transform = Transform3D(1, 0, 0, 0, -0.07418751, 0.9972443, 0, -0.9972443, -0.07418751, 0, -1.447727, 10.807431)
+light_energy = 5.743
+shadow_enabled = true
+spot_attenuation = -0.57
+spot_angle = 84.89
+script = ExtResource("5_3t6hy")
+
+[node name="InteriorReflectionProbe" type="ReflectionProbe" parent="." unique_id=804408540]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29822862, -0.68524575, 10.608669)
+size = Vector3(20, 20, 34.490173)
+box_projection = true
+enable_shadows = true
+
+[node name="MirrorViewport" type="SubViewport" parent="." unique_id=1740374508]
+own_world_3d = true
+render_target_update_mode = 4
+
+[node name="MirrorCamera" type="Camera3D" parent="MirrorViewport" unique_id=1816274956 node_paths=PackedStringArray("player_cam")]
+transform = Transform3D(-0.10692052, 0, -0.9942676, 0, 1, 0, 0.9942676, 0, -0.10692052, -3.711256, 0.9121375, 0)
+fov = 94.79474
+script = ExtResource("6_ijw5b")
+player_cam = NodePath("../../Player/PlayerCamera")
+
+[node name="MainRoom" parent="." unique_id=1423409591 instance=ExtResource("7_o5mb0")]
+transform = Transform3D(-3.0795164, 0, 0.102372594, 0, 2.804306, 0, -0.19563207, 0, -1.6114827, 0.26699376, -0.09505463, 2.039831)
+
+[node name="Kitchen" parent="." unique_id=755083525 instance=ExtResource("8_30jvp")]
+transform = Transform3D(2.254453, 0, 0, 0, 4.7395735, 0, 0, 0, 4.7564473, 5.8456764, 0.4524814, 0)
+
+[node name="Bathroom" parent="." unique_id=439524832 instance=ExtResource("9_ihk4i")]
+transform = Transform3D(-0.09043898, 0, 2.939223, 0, 2.8660524, 0, -3.0614665, 0, -0.086827785, -4.188832, -0.01578021, 0)
+
+[node name="LivingRoom" parent="." unique_id=979072514 instance=ExtResource("10_ceood")]
+transform = Transform3D(4.528683, 0, 0, 0, 6.2355494, 0, 0, 0, 4.819682, -0.11798, 0.82291436, -6.339454)
+top_level = true
+
+[node name="AmbientSound" type="AudioStreamPlayer" parent="." unique_id=1928597773]
+stream = ExtResource("11_1pkbu")
+volume_db = 23.459
+autoplay = true
+
+[node name="PickupSound" type="AudioStreamPlayer" parent="." unique_id=340631980]
+stream = ExtResource("13_1pkbu")
+volume_db = 24.0
+pitch_scale = 4.0
+
+[node name="DialogueLayer" type="CanvasLayer" parent="." unique_id=1061157136]
+
+[node name="DialogueLabel" type="Label" parent="DialogueLayer" unique_id=858045979]
+offset_left = 501.0
+offset_top = 618.0
+offset_right = 817.0
+offset_bottom = 694.0
+
+[node name="GlitchLayer" type="CanvasLayer" parent="." unique_id=1442051312]
+
+[node name="GlitchOverlay" type="ColorRect" parent="GlitchLayer" unique_id=715212731]
+visible = false
+material = SubResource("ShaderMaterial_g7b7a")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
+
+[node name="BathroomTrigger" type="Area3D" parent="." unique_id=1618173542 node_paths=PackedStringArray("jumpscare_model")]
+script = ExtResource("15_a52oa")
+jumpscare_model = NodePath("../Jumpscare")
+
+[node name="BathroomTriggerCollision" type="CollisionShape3D" parent="BathroomTrigger" unique_id=1141207891]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, -4.4824176, 0, 0)
+shape = SubResource("BoxShape3D_g7b7a")
+
+[node name="Jumpscare" parent="." unique_id=356838057 instance=ExtResource("1_ic8f3")]
+transform = Transform3D(0.09938269, -0.0068641696, -0.9950256, -0.45588782, 0.8885365, -0.05166342, 0.88447124, 0.45875454, 0.08517587, 3.8488088, -0.9044744, -1.1512258)
+
+[node name="KitchenTrigger" type="Area3D" parent="Jumpscare" unique_id=1367052764 node_paths=PackedStringArray("jumpscare_model")]
+transform = Transform3D(0.09938271, -0.45588788, 0.8844713, -0.0068641687, 0.88853663, 0.45875457, -0.9950257, -0.05166343, 0.08517587, 0.22338217, 1.3582076, 3.880992)
+script = ExtResource("10_1g7yk")
+jumpscare_model = NodePath("..")
+
+[node name="KitchenTriggerCollision" type="CollisionShape3D" parent="Jumpscare/KitchenTrigger" unique_id=1212614146]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 3.4632015, 0, -1.1056589)
+shape = SubResource("BoxShape3D_ceood")
+
+[node name="JumpscareSound" type="AudioStreamPlayer" parent="Jumpscare/KitchenTrigger" unique_id=696920235]
+stream = ExtResource("12_0ynq7")
+volume_db = 24.0
+
+[node name="TriggerVisual01" type="MeshInstance3D" parent="." unique_id=606262310]
+transform = Transform3D(2.5101287, 0, 0, 0, 1.9999821, 0, 0, 0, 0.18618214, 2.2543912, 0.94914925, 0.72970045)
+mesh = SubResource("BoxMesh_gyc6d")
+
+[node name="TriggerVisual02" type="MeshInstance3D" parent="." unique_id=137227992]
+transform = Transform3D(2.5101287, 0, 0, 0, 1.9999821, 0, 0, 0, 0.18618214, -1.4087467, 0.94914925, 0.72970045)
+visible = false
+mesh = SubResource("BoxMesh_gyc6d")
+
+[connection signal="pressed" from="HUD/FlashlightButton" to="Player/PlayerCamera/Flashlight" method="_on_button_pressed"]

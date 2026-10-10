@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://bflw57f8c3gyw"]
+
+[ext_resource type="PackedScene" uid="uid://do22gfx8k6edm" path="res://model.gltf" id="1_bctr2"]
+
+[node name="model" unique_id=1204125476 instance=ExtResource("1_bctr2")]
